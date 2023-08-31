@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  avito-app:
+    build: ./
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    environment:
+      - DB_PASSWORD=task
+
+  db:
+    container_name: "db"
+    restart: always
+    image: postgres:latest
+    volumes:
+      - ./.database/postgres/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD = ${DB_PASSWORD}
+      - POSTGRES_USER = ${DB_USER}
+      - POSTGRES_DB = ${DB_NAME}
+    ports:
+      - 5436:5432
+    expose: 
+      - "5432"

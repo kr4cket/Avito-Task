@@ -1,0 +1,405 @@
+basePath: /
+definitions:
+  handlers.changeSegment:
+    properties:
+      add:
+        items:
+          type: string
+        type: array
+      delete:
+        items:
+          type: string
+        type: array
+    type: object
+  handlers.dateInput:
+    properties:
+      month:
+        type: integer
+      year:
+        type: integer
+    required:
+    - month
+    - year
+    type: object
+  handlers.expiredSegment:
+    properties:
+      segment:
+        type: string
+      time:
+        type: integer
+    type: object
+  models.Segment:
+    type: object
+  models.User:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: danielkoreshkov@gmail.com
+    name: Koreshkov Daniil
+  description: Dynamic segmentation service for Avito Service
+  title: Avito-Task API
+  version: "1.0"
+paths:
+  /api/segments/add:
+    post:
+      consumes:
+      - application/json
+      description: Создает сегмент в базе данных, при указании процента пользователей,
+        которые должны находиться в сегменте, автоматически добавляет случайных пользователей
+        в этот сегмент
+      operationId: create-account
+      parameters:
+      - description: Информация о сегменте
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.Segment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+        default:
+          description: ""
+          schema:
+            additionalProperties: true
+            type: object
+      summary: CreateSegment
+  /api/segments/all:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает все активные сегменты пользователя из Базы данных
+      operationId: get-all-segments
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+        default:
+          description: ""
+          schema:
+            additionalProperties: true
+            type: object
+      summary: GetAllSegments
+  /api/segments/delete/:segmentName:
+    delete:
+      consumes:
+      - application/json
+      description: Удаляет выбранный сегмент по уникальному имени
+      operationId: delete-segment
+      parameters:
+      - description: Segment Name
+        in: path
+        name: segmentName
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+        default:
+          description: ""
+          schema:
+            additionalProperties: true
+            type: object
+      summary: DeleteSegmentByName
+  /api/segments/get/:id:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает сегмент по идентификатору
+      operationId: get-one-segment
+      parameters:
+      - description: Segment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+        default:
+          description: ""
+          schema:
+            additionalProperties: true
+            type: object
+      summary: GetSegmentById
+  /api/users/active-segments/:id:
+    get:
+      consumes:
+      - application/json
+      description: Получает информацию об активных сегментах, в которых находится
+        пользователь
+      operationId: get-active-segments
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Период за который необходимо получить информацию
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.dateInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                type: string
+              type: array
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+        default:
+          description: ""
+          schema:
+            additionalProperties: true
+            type: object
+      summary: GetActiveSegments
+  /api/users/add:
+    post:
+      consumes:
+      - application/json
+      description: Создает пользователя в базе данных
+      operationId: add-user
+      parameters:
+      - description: Информация о пользователе
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+        default:
+          description: ""
+          schema:
+            additionalProperties: true
+            type: object
+      summary: AddUser
+  /api/users/change-segments/:id:
+    post:
+      consumes:
+      - application/json
+      description: Позволяет добавить/удалить пользователя в сегмент (или несколько
+        сегментов)
+      operationId: change-user-segments
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Принимает массивы сегментов для удаления и добавления
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.changeSegment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+        default:
+          description: ""
+          schema:
+            additionalProperties: true
+            type: object
+      summary: ChangeUserSegments
+  /api/users/expired-segments/:id:
+    post:
+      consumes:
+      - application/json
+      description: Добавляет пользователя в сегмент на время
+      operationId: add-expired-segment
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Принимает имя сегмента и время, через которое необходимо удалить
+          пользователя из сегмента (в часах)
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.expiredSegment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+        default:
+          description: ""
+          schema:
+            additionalProperties: true
+            type: object
+      summary: AddExpiredSegment
+  /api/users/history/:id:
+    post:
+      consumes:
+      - application/json
+      description: Создает ссылку на CSV-файл с историей добавлений/удалений пользователя
+        в сегменты
+      operationId: get-history
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Период за который необходимо получить информацию
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.dateInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Link
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+        default:
+          description: ""
+          schema:
+            additionalProperties: true
+            type: object
+      summary: GetHistory
+  /service/download/:id:
+    get:
+      consumes:
+      - application/json
+      description: Позволяет скачать сгенерированный CSV-файл с сервера
+      operationId: download-file
+      parameters:
+      - description: File ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Download
+swagger: "2.0"

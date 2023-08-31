@@ -1,0 +1,8 @@
+id,user_id,segment_name,action,time
+11,10,VK,added,2023-08-31T08:15:37.619225Z
+10,10,string1,added,2023-08-31T08:14:42.604702Z
+9,10,TestName,added,2023-08-31T08:14:42.604702Z
+8,10,string,deleted,2023-08-31T08:14:42.59635Z
+7,10,VK,deleted,2023-08-31T08:14:42.59635Z
+6,10,string,added,2023-08-31T06:47:20.679244Z
+3,10,VK,added,2023-08-31T04:34:51.230242Z
