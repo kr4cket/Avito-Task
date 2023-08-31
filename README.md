@@ -33,7 +33,7 @@ ____
     make add-tables
 ```
 #### Вариант 2
-Выаолнить последовательно команды:
+Выполнить последовательно команды:
 
 ##### Код запуска dev-среды:
 ```
@@ -106,6 +106,7 @@ ____
 ##### Запрос
 `http://localhost:8080/api/segments/get/12`
 ##### Ответ
+**JSON**
 ```
 {
     "id": 12,
@@ -131,22 +132,28 @@ ____
   "entirety": Value // integer, not required
 }
 ```
++ id - идентификатор сегмента (автоинкремент)
++ name - имя сегмента 
++ entirety - процент пользователей, которые должны быть в этом сегменте
 
 #### Возвращает
 Результат выполнения добавления:
-+ true - если все выполненно успешно
++ true - если все выполнено успешно
 + false, error - если найдена ошибка
 
 #### Пример работы:
 
 ##### Запрос
 `http://localhost:8080/api/segments/add`
+
+**JSON**
 ```
 {
     "name": "TEST_AVITO_SEGMENT"
 }
 ```
 ##### Ответ
+**JSON**
 ```
 {
     "isInsert": true
@@ -160,7 +167,7 @@ ____
 `"api/segments/delete/:segmentName"`
 + segmentName - название сегмента (string)
 #### Возвращает
-+ true - если все выполненно успешно
++ true - если все выполнено успешно
 + false, error - если найдена ошибка
 
 #### Пример работы:
@@ -168,6 +175,7 @@ ____
 ##### Запрос
 `http://localhost:8080/api/segments/delete/TEST_AVITO_SEGMENT`
 ##### Ответ
+**JSON**
 ```
 {
     "isDelete": true
@@ -190,7 +198,7 @@ ____
 `http://localhost:8080/api/users/active-segments/10`
 
 ##### Ответ
-
+**JSON**
 ```
 {
     "activeSegments": [
@@ -216,7 +224,8 @@ ____
   "year": Value // integer, required
 }
 ```
-
++ month - месяц 
++ year - год
 #### Возвращает
 Сгенерированную ссылку для скачивания Link(string)
 
@@ -226,6 +235,7 @@ ____
 
 `http://localhost:8080/api/users/history/10`
 
+**JSON**
 ```
 {
     "year": 2023,
@@ -234,6 +244,7 @@ ____
 ```
 ##### Ответ
 
+**JSON**
 ```
 {
     "downloadLink": "localhost:8080/service/download/JrRbBvzc"
@@ -255,7 +266,8 @@ ____
   "delete": Value // []string, required
 }
 ```
-
++ add - срез имен Сегментов на добавление
++ delete - срез имен Сегментов на удаление
 #### Возвращает
 Результат работы:
 + true, int, int - успешное добавление/удаление (дополнительно выводи количество добавленных/удаленных сегментов)
@@ -267,6 +279,7 @@ ____
 
 `http://localhost:8080/api/users/change-segments/10`
 
+**JSON**
 ```
 {
     "delete": ["AVITO_SEGMENT_VIDEO", "AVITO_SEGMENT_VOICE"],
@@ -275,6 +288,7 @@ ____
 ```
 
 ##### Ответ
+**JSON**
 ```
 {
     "added": 1,
@@ -302,7 +316,7 @@ ____
 
 #### Возвращает
 Результат работы:
-+ true, - успешное добавление
++ true - успешное добавление
 + false, error - ошибка в ходе выполнения метода
 
 #### Пример работы:
@@ -310,6 +324,7 @@ ____
 ##### Запрос
 `http://localhost:8080/api/users/expired-segments/10`
 
+**JSON**
 ```
 {
     "segment": "AVITO_SEGMENT_AUDIO",
@@ -317,6 +332,7 @@ ____
 }
 ```
 ##### Ответ
+**JSON**
 ```
 {
     "isSegmentListChanged": true
@@ -329,7 +345,6 @@ ____
 
 #### Аргументы на вход
 `"api/users/add"`
-
 
 **JSON**
 ```
@@ -351,6 +366,7 @@ false, error - ошибка во время добавления
 
 `"api/users/add"`
 
+**JSON**
 ```
 {
     "login": "avito",
@@ -359,6 +375,7 @@ false, error - ошибка во время добавления
 ```
 
 ##### Ответ
+**JSON**
 ```
 {
     "userAdded": true
@@ -381,6 +398,7 @@ CSV-файл
 ##### Запрос
 `http://localhost:8080/service/download/nirUwP3I`
 ##### Ответ
+**CSV**
 ```
 id,user_id,segment_name,action,time
 15,10,AVITO_TEST_1,added,2023-08-31T10:36:38.185193Z
