@@ -58,12 +58,13 @@ ____
 ##### Запрос
 `http://localhost:8080/api/segments/all`
 ##### Ответ
+**JSON**
 ```
 {
     "data": [
         {
             "id": 12,
-            "name": "VK",
+            "name": "AVITO_TESTING",
             "entirety": {
                 "Int16": 0,
                 "Valid": false
